@@ -22,10 +22,6 @@ func (e *Product) Hello() func(resp http.ResponseWriter, req *http.Request) {
 
 		name := e.productService.Hello()
 
-		if name == "" {
-			name = "guest"
-		}
-
-		fmt.Fprintf(resp, "Hello %s!", name)
+		fmt.Fprintf(resp, "%s", name)
 	}
 }
