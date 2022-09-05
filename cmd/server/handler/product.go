@@ -19,9 +19,16 @@ func NewProduct(e product.Service) *Product {
 
 func (e *Product) Hello() func(resp http.ResponseWriter, req *http.Request) {
 	return func(resp http.ResponseWriter, req *http.Request) {
+		products, err := e.productService.Hello() //cambiar nombre
+		if err != nil {
+			fmt.Fprintf(resp, "%s", err)
+			return
+		}
+		if len(products) == 0 {
+			fmt.Fprintf(resp, "%s", err)
+			return
+		}
 
-		name := e.productService.Hello()
-
-		fmt.Fprintf(resp, "%s", name)
+		fmt.Fprintf(resp, "%s", products)
 	}
 }

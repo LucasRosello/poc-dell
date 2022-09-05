@@ -13,3 +13,10 @@
 
 
  docker run --name testing-postgres -e POSTGRES_PASSWORD=secret -d -p 5432:5432 postgres
+
+ docker exec -it ID bash
+ psql -U postgres
+
+CREATE TABLE product(product_code  VARCHAR (50) PRIMARY KEY, description VARCHAR(50), avaliable BOOL);
+INSERT INTO product (product_code, description, avaliable) values ('E35', 'Secaplatos', true);
+select * from product;
