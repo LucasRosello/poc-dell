@@ -3,15 +3,13 @@ package product
 import (
 	"database/sql"
 	"errors"
-	"fmt"
-	"os"
 
 	"github.com/LucasRosello/poc-dell/internal/domain"
 )
 
 type Repository interface {
 	GetAll() ([]domain.Product, error)
-	Get(id int) (domain.Product, error)
+	Get(product_code string) (domain.Product, error)
 	Save(w domain.Product) (int, error)
 	Update(w domain.Product) error
 	Delete(id int) error
@@ -25,17 +23,6 @@ func NewRepository(db *sql.DB) Repository {
 	return &repository{
 		db: db,
 	}
-}
-
-func (r *repository) Hello() string {
-	var greeting string
-	err := r.db.QueryRow("select 'Hello, world!'").Scan(&greeting)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
-		os.Exit(1)
-	}
-
-	return greeting
 }
 
 func (r *repository) GetAll() ([]domain.Product, error) {
@@ -56,9 +43,9 @@ func (r *repository) GetAll() ([]domain.Product, error) {
 	return products, nil
 }
 
-func (r *repository) Get(id int) (domain.Product, error) {
-	query := "SELECT * FROM products WHERE id=?;"
-	row := r.db.QueryRow(query, id)
+func (r *repository) Get(product_code string) (domain.Product, error) {
+	query := "SELECT * FROM product WHERE product_code=?;"
+	row := r.db.QueryRow(query, product_code)
 	p := domain.Product{}
 	err := row.Scan(&p.ProductCode, &p.Description, &p.Avaliable)
 	if err != nil {

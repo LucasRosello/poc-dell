@@ -1,10 +1,12 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
 	"github.com/LucasRosello/poc-dell/internal/product"
+	"github.com/gorilla/mux"
 )
 
 type Product struct {
@@ -17,9 +19,9 @@ func NewProduct(e product.Service) *Product {
 	}
 }
 
-func (e *Product) Hello() func(resp http.ResponseWriter, req *http.Request) {
+func (e *Product) GetAll() func(resp http.ResponseWriter, req *http.Request) {
 	return func(resp http.ResponseWriter, req *http.Request) {
-		products, err := e.productService.Hello() //cambiar nombre
+		products, err := e.productService.GetAll()
 		if err != nil {
 			fmt.Fprintf(resp, "%s", err)
 			return
@@ -29,6 +31,18 @@ func (e *Product) Hello() func(resp http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		fmt.Fprintf(resp, "%s", products)
+		json.NewEncoder(resp).Encode(&products)
+	}
+}
+
+func (p *Product) Get() func(resp http.ResponseWriter, req *http.Request) {
+	return func(resp http.ResponseWriter, req *http.Request) {
+		product_code, _ := mux.Vars(req)["product_code"]
+		product, err := p.productService.Get(product_code)
+		if err != nil {
+			return
+		}
+
+		json.NewEncoder(resp).Encode(&product)
 	}
 }

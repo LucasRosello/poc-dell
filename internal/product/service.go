@@ -11,7 +11,8 @@ type service struct {
 }
 
 type Service interface {
-	Hello() ([]domain.Product, error)
+	GetAll() ([]domain.Product, error)
+	Get(product_code string) (domain.Product, error)
 }
 
 func NewService(repository Repository) Service {
@@ -20,7 +21,7 @@ func NewService(repository Repository) Service {
 	}
 }
 
-func (s *service) Hello() ([]domain.Product, error) {
+func (s *service) GetAll() ([]domain.Product, error) {
 	products, err := s.repository.GetAll()
 
 	if err != nil {
@@ -32,4 +33,14 @@ func (s *service) Hello() ([]domain.Product, error) {
 	}
 
 	return products, nil
+}
+
+func (s *service) Get(product_code string) (domain.Product, error) {
+
+	product, err := s.repository.Get(product_code)
+	if err != nil {
+		return domain.Product{}, errors.New("product not found")
+	}
+	return product, nil
+
 }
