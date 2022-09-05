@@ -37,7 +37,9 @@ func (e *Product) GetAll() func(resp http.ResponseWriter, req *http.Request) {
 
 func (p *Product) Get() func(resp http.ResponseWriter, req *http.Request) {
 	return func(resp http.ResponseWriter, req *http.Request) {
-		product_code, _ := mux.Vars(req)["product_code"]
+		params := mux.Vars(req)
+		product_code := params["product_code"]
+
 		product, err := p.productService.Get(product_code)
 		if err != nil {
 			return

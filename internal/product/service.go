@@ -36,8 +36,8 @@ func (s *service) GetAll() ([]domain.Product, error) {
 }
 
 func (s *service) Get(product_code string) (domain.Product, error) {
-
 	product, err := s.repository.Get(product_code)
+
 	if err != nil {
 		return domain.Product{}, errors.New("product not found")
 	}

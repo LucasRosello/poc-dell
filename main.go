@@ -30,7 +30,7 @@ func main() {
 
 	// Routes
 	r.HandleFunc("/products", productHandler.GetAll()).Methods("GET")
-	//	r.HandleFunc("/products/{product_code}", productHandler.Get()).Methods("GET")
+	r.HandleFunc("/products/{product_code}", productHandler.Get()).Methods("GET")
 	r.HandleFunc("/products", productHandler.GetAll()).Methods("POST")
 	http.ListenAndServe(":8080", r)
 }
